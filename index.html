@@ -8,25 +8,33 @@
 </head>
 
 <body>
-  <!-- Bild-Vorschau (standardmäßig unsichtbar) -->
-  <div class="preview" id="preview" aria-hidden="true">
+  <!-- Preview (Desktop + Mobile) -->
+  <div class="preview show" id="preview" aria-hidden="false">
+    <!-- Mobile: Jahre oben (Desktop auch ok) -->
+    <div class="year" id="year"></div>
+
+    <!-- Bild -->
     <img id="preview-img" alt="">
+
+    <!-- Mobile: Klickzonen links/rechts -->
+    <button class="nav nav-prev" id="prev" type="button" aria-label="Vorheriges Bild"></button>
+    <button class="nav nav-next" id="next" type="button" aria-label="Nächstes Bild"></button>
   </div>
 
-  <!-- Timeline -->
+  <!-- Timeline (nur Desktop sichtbar) -->
   <div class="timeline" aria-label="Zeitstrahl">
-    <button class="event" type="button" data-index="0">2009–2015</button>
-    <button class="event" type="button" data-index="1">2015</button>
-    <button class="event" type="button" data-index="2">2015</button>
-    <button class="event" type="button" data-index="3">2015–2016</button>
-    <button class="event" type="button" data-index="4">2016</button>
-    <button class="event" type="button" data-index="5">2016–2017</button>
-    <button class="event" type="button" data-index="6">2016</button>
-    <button class="event" type="button" data-index="7">2017–2019</button>
-    <button class="event" type="button" data-index="8">2019–2022</button>
-    <button class="event" type="button" data-index="9">2022</button>
-    <button class="event" type="button" data-index="10">2022–2025</button>
-    <button class="event" type="button" data-index="11">2025–2026</button>
+    <button class="event" type="button" data-index="0"  data-label="2009–2015">2009–2015</button>
+    <button class="event" type="button" data-index="1"  data-label="2015">2015</button>
+    <button class="event" type="button" data-index="2"  data-label="2015">2015</button>
+    <button class="event" type="button" data-index="3"  data-label="2015–2016">2015–2016</button>
+    <button class="event" type="button" data-index="4"  data-label="2016">2016</button>
+    <button class="event" type="button" data-index="5"  data-label="2016–2017">2016–2017</button>
+    <button class="event" type="button" data-index="6"  data-label="2016">2016</button>
+    <button class="event" type="button" data-index="7"  data-label="2017–2019">2017–2019</button>
+    <button class="event" type="button" data-index="8"  data-label="2019–2022">2019–2022</button>
+    <button class="event" type="button" data-index="9"  data-label="2022">2022</button>
+    <button class="event" type="button" data-index="10" data-label="2022–2025">2022–2025</button>
+    <button class="event" type="button" data-index="11" data-label="2025–2026">2025–2026</button>
   </div>
 
   <script>
@@ -46,32 +54,40 @@
     ];
 
     const events = document.querySelectorAll(".event");
-    const preview = document.getElementById("preview");
     const previewImg = document.getElementById("preview-img");
+    const year = document.getElementById("year");
+    const prevBtn = document.getElementById("prev");
+    const nextBtn = document.getElementById("next");
 
-    function showImage(index){
-      previewImg.src = imageSources[index];
-      preview.classList.add("show");
-      preview.setAttribute("aria-hidden", "false");
+    let currentIndex = 0;
+
+    function eventByIndex(idx){
+      return document.querySelector(`.event[data-index="${idx}"]`);
     }
 
+    function render(idx){
+      const n = imageSources.length;
+      currentIndex = (idx % n + n) % n;
+
+      previewImg.src = imageSources[currentIndex];
+
+      const ev = eventByIndex(currentIndex);
+      year.textContent = ev?.dataset.label || "";
+    }
+
+    // Startbild
+    render(0);
+
+    // Desktop: Klick auf Timeline
     events.forEach(ev => {
       ev.addEventListener("click", () => {
-        const idx = Number(ev.dataset.index);
-        showImage(idx);
+        render(Number(ev.dataset.index));
       });
     });
 
-    // Optional: Klick ins Leere blendet das Bild wieder aus
-    document.addEventListener("click", (e) => {
-      const clickedEvent = e.target.closest(".event");
-      const clickedPreview = e.target.closest("#preview");
-      if (clickedEvent || clickedPreview) return;
-
-      preview.classList.remove("show");
-      preview.setAttribute("aria-hidden", "true");
-      previewImg.removeAttribute("src");
-    });
+    // Mobile: Klick links/rechts
+    prevBtn.addEventListener("click", () => render(currentIndex - 1));
+    nextBtn.addEventListener("click", () => render(currentIndex + 1));
   </script>
 </body>
 </html>
