@@ -1,0 +1,77 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Zeitstrahl</title>
+  <link rel="stylesheet" href="layout.css">
+</head>
+
+<body>
+  <!-- Bild-Vorschau (standardmäßig unsichtbar) -->
+  <div class="preview" id="preview" aria-hidden="true">
+    <img id="preview-img" alt="">
+  </div>
+
+  <!-- Timeline -->
+  <div class="timeline" aria-label="Zeitstrahl">
+    <button class="event" type="button" data-index="0">2009–2015</button>
+    <button class="event" type="button" data-index="1">2015</button>
+    <button class="event" type="button" data-index="2">2015</button>
+    <button class="event" type="button" data-index="3">2015–2016</button>
+    <button class="event" type="button" data-index="4">2016</button>
+    <button class="event" type="button" data-index="5">2016–2017</button>
+    <button class="event" type="button" data-index="6">2016</button>
+    <button class="event" type="button" data-index="7">2017–2019</button>
+    <button class="event" type="button" data-index="8">2019–2022</button>
+    <button class="event" type="button" data-index="9">2022</button>
+    <button class="event" type="button" data-index="10">2022–2025</button>
+    <button class="event" type="button" data-index="11">2025–2026</button>
+  </div>
+
+  <script>
+    const imageSources = [
+      "Bilder/layout1.png",
+      "Bilder/layout2.png",
+      "Bilder/layout3.png",
+      "Bilder/layout4.png",
+      "Bilder/layout5.png",
+      "Bilder/layout6.png",
+      "Bilder/layout7.png",
+      "Bilder/layout8.png",
+      "Bilder/layout9.png",
+      "Bilder/layout10.png",
+      "Bilder/layout11.png",
+      "Bilder/layout12.png",
+    ];
+
+    const events = document.querySelectorAll(".event");
+    const preview = document.getElementById("preview");
+    const previewImg = document.getElementById("preview-img");
+
+    function showImage(index){
+      previewImg.src = imageSources[index];
+      preview.classList.add("show");
+      preview.setAttribute("aria-hidden", "false");
+    }
+
+    events.forEach(ev => {
+      ev.addEventListener("click", () => {
+        const idx = Number(ev.dataset.index);
+        showImage(idx);
+      });
+    });
+
+    // Optional: Klick ins Leere blendet das Bild wieder aus
+    document.addEventListener("click", (e) => {
+      const clickedEvent = e.target.closest(".event");
+      const clickedPreview = e.target.closest("#preview");
+      if (clickedEvent || clickedPreview) return;
+
+      preview.classList.remove("show");
+      preview.setAttribute("aria-hidden", "true");
+      previewImg.removeAttribute("src");
+    });
+  </script>
+</body>
+</html>
