@@ -104,10 +104,6 @@ body{
   border-radius: 6px;
 }
 
-/* =========================
-   Mobile: kein Zeitstrahl,
-   Vollbild + Klick links/rechts + Jahre oben im Bild
-   ========================= */
 @media (max-width: 430px){
   /* Timeline aus */
   .timeline{
@@ -126,34 +122,44 @@ body{
 
   /* Jahr oben im Bild */
   .year{
-    display: block;
-    top: 100px;
+    top: 200px;
     left: 12px;
     right: 12px;
     font-size: 16px;
     z-index: 3;
+    display: block;
+  }
+
+ 
+  .preview{
+    --nav-top: 420px;      /* weiter runter = größerer Wert */
+    --nav-bottom: 80px;    /* lässt unten Platz (z.B. iOS Safari Bar) */
+    --nav-width: 35vw;
   }
 
   .nav{
     display: block;
     position: absolute;
-    top: 0;
-    bottom: 0;
-    width: 35vw;
+
+    /* Touchfläche wird VERSCHOBEN */
+    top: var(--nav-top);
+    bottom: var(--nav-bottom);
+    width: var(--nav-width);
+
     background: transparent;
     border: 0;
     padding: 0;
     z-index: 2;
 
-    /* wichtig: damit das Icon perfekt mittig sitzt */
+    /* Icon in der Touchfläche zentrieren */
     display: grid;
     place-items: center;
   }
 
-  .nav-prev{ left: -30px; }
-  .nav-next{ right: -30px; }
+  .nav-prev{ left: 0; }
+  .nav-next{ right: 0; }
 
-  /* Kreis-Hintergrund */
+  /* Symmetrische Pfeile */
   .nav::before{
     content: "";
     width: 48px;
@@ -164,7 +170,6 @@ body{
     box-shadow: 0 6px 18px rgba(0,0,0,0.35);
   }
 
-  /* Pfeil-Zeichen darüber */
   .nav::after{
     position: absolute;
     color: white;
